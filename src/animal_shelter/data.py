@@ -1,8 +1,7 @@
 """Loads data for the animal shelter use case."""
 
+from typing import Iterable
 import pandas as pd
-
-
 def load_data(path: str) -> pd.DataFrame:
     """Load the data and convert the column names.
 
@@ -22,13 +21,13 @@ def load_data(path: str) -> pd.DataFrame:
     df = (
         pd.read_csv(path, parse_dates=["DateTime"])
         .rename(columns=lambda x: x.replace("upon", "Upon"))
-        .rename(columns=_convert_camel_case)
+        .rename(columns=convert_camel_case)
         .fillna("Unknown")
     )
     return df
 
 
-def _convert_camel_case(name: str) -> str:
+def convert_camel_case(name: str) -> str:
     import re
 
     """Convert camelCaseString to snake_case_string."""

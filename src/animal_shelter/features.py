@@ -21,29 +21,29 @@ def add_features(df: Dataframe) -> Dataframe:
     """
     print("test ci pipeline, la la la")
     df_copy = df.copy()
-    df_copy["is_dog"] = _check_is_dog(df_copy["animal_type"])
+    df_copy["is_dog"] = check_is_dog(df_copy["animal_type"])
 
     # Check if it has a name.
-    df_copy["has_name"] = _check_has_name(df_copy["name"])
+    df_copy["has_name"] = check_has_name(df_copy["name"])
 
     # Get sex.
-    df_copy["sex"] = _get_sex(df_copy["sex_upon_outcome"])
+    df_copy["sex"] = get_sex(df_copy["sex_upon_outcome"])
 
     # Check if neutered.
-    df_copy["neutered"] = _get_neutered(df_copy["sex_upon_outcome"])
+    df_copy["neutered"] = get_neutered(df_copy["sex_upon_outcome"])
 
     # Get hair type.
-    df_copy["hair_type"] = _get_hair_type(df_copy["breed"])
+    df_copy["hair_type"] = get_hair_type(df_copy["breed"])
 
     # Age in days upon outcome.
-    df_copy["days_upon_outcome"] = _compute_days_upon_outcome(
+    df_copy["days_upon_outcome"] = compute_days_upon_outcome(
         df_copy["age_upon_outcome"]
     )
 
     return df_copy
 
 
-def _check_is_dog(animal_type: Series) -> Series:
+def check_is_dog(animal_type: Series) -> Series:
     """Check if the animal is a dog, otherwise return False.
 
     Parameters
@@ -66,7 +66,7 @@ def _check_is_dog(animal_type: Series) -> Series:
     return is_dog
 
 
-def _check_has_name(name: Series) -> Series:
+def check_has_name(name: Series) -> Series:
     """Check if the animal is not called 'unknown'.
 
     Parameters
@@ -84,7 +84,7 @@ def _check_has_name(name: Series) -> Series:
     return has_name  # TODO: Replace this.
 
 
-def _get_sex(sex_upon_outcome: Series) -> Series:
+def get_sex(sex_upon_outcome: Series) -> Series:
     """Determine if the sex was 'Male', 'Female' or unknown.
 
     Parameters
@@ -108,7 +108,7 @@ def _get_sex(sex_upon_outcome: Series) -> Series:
     return sex  # TODO: Replace this.
 
 
-def _get_neutered(sex_upon_outcome: Series) -> Series:
+def get_neutered(sex_upon_outcome: Series) -> Series:
     """Determine if an animal was intact or not.
 
     Parameters
@@ -132,7 +132,7 @@ def _get_neutered(sex_upon_outcome: Series) -> Series:
     return neutered  # TODO: Replace this.
 
 
-def _get_hair_type(breed: Series) -> Series:
+def get_hair_type(breed: Series) -> Series:
     """Get hair type of a breed.
 
     Parameters
@@ -158,7 +158,7 @@ def _get_hair_type(breed: Series) -> Series:
     return hair_type  # TODO: Replace this.
 
 
-def _compute_days_upon_outcome(age_upon_outcome: Series) -> Series:
+def compute_days_upon_outcome(age_upon_outcome: Series) -> Series:
     """Compute age in days upon outcome.
 
     Parameters
