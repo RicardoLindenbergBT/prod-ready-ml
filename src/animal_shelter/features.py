@@ -19,7 +19,7 @@ def add_features(df: Dataframe) -> Dataframe:
         DataFrame with some column features added
 
     """
-    print("test ci pipeline")
+    print("test ci pipeline, la la la")
     df_copy = df.copy()
     df_copy["is_dog"] = _check_is_dog(df_copy["animal_type"])
 
