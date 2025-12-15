@@ -1,10 +1,9 @@
 """Creates features for the animal shelter dataframe."""
 
+from typing import Iterable
 import pandas as pd
-
 Dataframe = pd.DataFrame
 Series = pd.Series
-
 
 def add_features(df: Dataframe) -> Dataframe:
     """Add some features to our data.
@@ -20,6 +19,7 @@ def add_features(df: Dataframe) -> Dataframe:
         DataFrame with some column features added
 
     """
+    print("test ci pipeline, la la la")
     df_copy = df.copy()
     df_copy["is_dog"] = _check_is_dog(df_copy["animal_type"])
 
