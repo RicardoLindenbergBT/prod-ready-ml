@@ -1,0 +1,191 @@
+"""Creates features for the animal shelter dataframe."""
+
+import pandas as pd
+
+Dataframe = pd.DataFrame
+Series = pd.Series
+
+
+def add_features(df: Dataframe) -> Dataframe:
+    """Add some features to our data.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame with data (see load_data)
+
+    Returns
+    -------
+    with_features : pandas.DataFrame
+        DataFrame with some column features added
+
+    """
+    df_copy = df.copy()
+    df_copy["is_dog"] = _check_is_dog(df_copy["animal_type"])
+
+    # Check if it has a name.
+    df_copy["has_name"] = _check_has_name(df_copy["name"])
+
+    # Get sex.
+    df_copy["sex"] = _get_sex(df_copy["sex_upon_outcome"])
+
+    # Check if neutered.
+    df_copy["neutered"] = _get_neutered(df_copy["sex_upon_outcome"])
+
+    # Get hair type.
+    df_copy["hair_type"] = _get_hair_type(df_copy["breed"])
+
+    # Age in days upon outcome.
+    df_copy["days_upon_outcome"] = _compute_days_upon_outcome(
+        df_copy["age_upon_outcome"]
+    )
+
+    return df_copy
+
+
+def _check_is_dog(animal_type: Series) -> Series:
+    """Check if the animal is a dog, otherwise return False.
+
+    Parameters
+    ----------
+    animal_type : pandas.Series
+        Type of animal
+
+    Returns
+    -------
+    result : pandas.Series
+        Dog or not
+
+    """
+    # Check if it's either a cat or a dog.
+    is_cat_dog = animal_type.str.lower().isin(["dog", "cat"])
+    if not is_cat_dog.all():
+        print("Found something else but dogs and cats:\n%s", animal_type[~is_cat_dog])
+        raise RuntimeError("Found pets that are not dogs or cats.")
+    is_dog = animal_type.str.lower() == "dog"
+    return is_dog
+
+
+def _check_has_name(name: Series) -> Series:
+    """Check if the animal is not called 'unknown'.
+
+    Parameters
+    ----------
+    name : pandas.Series
+        Animal name
+
+    Returns
+    -------
+    result : pandas.Series
+        Unknown or not.
+
+    """
+    has_name = name.str.lower() != "unknown"
+    return has_name  # TODO: Replace this.
+
+
+def _get_sex(sex_upon_outcome: Series) -> Series:
+    """Determine if the sex was 'Male', 'Female' or unknown.
+
+    Parameters
+    ----------
+    sex_upon_outcome : pandas.Series
+        Sex and fixed state when coming in
+
+    Returns
+    -------
+    sex : pandas.Series
+        Sex when coming in
+
+    """
+    # import pandas as pd
+
+    sex = pd.Series("unknown", index=sex_upon_outcome.index)
+
+    sex.loc[sex_upon_outcome.str.endswith("Female")] = "female"
+    sex.loc[sex_upon_outcome.str.endswith("Male")] = "male"
+    sex
+    return sex  # TODO: Replace this.
+
+
+def _get_neutered(sex_upon_outcome: Series) -> Series:
+    """Determine if an animal was intact or not.
+
+    Parameters
+    ----------
+    sex_upon_outcome : pandas.Series
+        Sex and fixed state when coming in
+
+    Returns
+    -------
+    sex : pandas.Series
+        Intact, fixed or unknown
+
+    """
+    neutered = sex_upon_outcome.str.lower()
+    neutered.loc[neutered.str.contains("neutered")] = "fixed"
+    neutered.loc[neutered.str.contains("spayed")] = "fixed"
+
+    neutered.loc[neutered.str.contains("intact")] = "intact"
+    neutered.loc[~neutered.isin(["fixed", "intact"])] = "unknown"
+
+    return neutered  # TODO: Replace this.
+
+
+def _get_hair_type(breed: Series) -> Series:
+    """Get hair type of a breed.
+
+    Parameters
+    ----------
+    breed : pandas.Series
+        Breed of animal
+
+    Returns
+    -------
+    hair_type : pandas.Series
+        Hair type
+
+    """
+    hair_type = breed.str.lower()
+    valid_hair_types = ["shorthair", "medium hair", "longhair"]
+
+    for hair in valid_hair_types:
+        is_hair_type = hair_type.str.contains(hair)
+        hair_type[is_hair_type] = hair
+
+    hair_type[~hair_type.isin(valid_hair_types)] = "unknown"
+
+    return hair_type  # TODO: Replace this.
+
+
+def _compute_days_upon_outcome(age_upon_outcome: Series) -> Series:
+    """Compute age in days upon outcome.
+
+    Parameters
+    ----------
+    age_upon_outcome : pandas.Series
+        Age as string
+
+    Returns
+    -------
+    days_upon_outcome : pandas.Series
+        Age in days
+
+    """
+    import numpy as np
+
+    split_age = age_upon_outcome.str.split()
+    time = split_age.apply(lambda x: x[0] if x[0] != "Unknown" else np.nan)
+    period = split_age.apply(lambda x: x[1] if x[0] != "Unknown" else None)
+    period_mapping = {
+        "year": 365,
+        "years": 365,
+        "weeks": 7,
+        "week": 7,
+        "month": 30,
+        "months": 30,
+        "days": 1,
+        "day": 1,
+    }
+    days_upon_outcome = time.astype(float) * period.map(period_mapping)
+    return days_upon_outcome  ## TODO: Replace this.
