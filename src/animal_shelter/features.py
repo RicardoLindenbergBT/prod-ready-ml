@@ -1,9 +1,9 @@
 """Creates features for the animal shelter dataframe."""
 
-from typing import Iterable
 import pandas as pd
+
 Dataframe = pd.DataFrame
-Series = pd.Series
+
 
 def add_features(df: Dataframe) -> Dataframe:
     """Add some features to our data.
@@ -43,7 +43,7 @@ def add_features(df: Dataframe) -> Dataframe:
     return df_copy
 
 
-def check_is_dog(animal_type: Series) -> Series:
+def check_is_dog(animal_type: pd.Series) -> pd.Series:
     """Check if the animal is a dog, otherwise return False.
 
     Parameters
@@ -66,7 +66,7 @@ def check_is_dog(animal_type: Series) -> Series:
     return is_dog
 
 
-def check_has_name(name: Series) -> Series:
+def check_has_name(name: pd.Series) -> pd.Series:
     """Check if the animal is not called 'unknown'.
 
     Parameters
@@ -84,7 +84,7 @@ def check_has_name(name: Series) -> Series:
     return has_name  # TODO: Replace this.
 
 
-def get_sex(sex_upon_outcome: Series) -> Series:
+def get_sex(sex_upon_outcome: pd.Series) -> pd.Series:
     """Determine if the sex was 'Male', 'Female' or unknown.
 
     Parameters
@@ -108,7 +108,7 @@ def get_sex(sex_upon_outcome: Series) -> Series:
     return sex  # TODO: Replace this.
 
 
-def get_neutered(sex_upon_outcome: Series) -> Series:
+def get_neutered(sex_upon_outcome: pd.Series) -> pd.Series:
     """Determine if an animal was intact or not.
 
     Parameters
@@ -132,7 +132,7 @@ def get_neutered(sex_upon_outcome: Series) -> Series:
     return neutered  # TODO: Replace this.
 
 
-def get_hair_type(breed: Series) -> Series:
+def get_hair_type(breed: pd.Series) -> pd.Series:
     """Get hair type of a breed.
 
     Parameters
@@ -158,7 +158,7 @@ def get_hair_type(breed: Series) -> Series:
     return hair_type  # TODO: Replace this.
 
 
-def compute_days_upon_outcome(age_upon_outcome: Series) -> Series:
+def compute_days_upon_outcome(age_upon_outcome: pd.Series) -> pd.Series:
     """Compute age in days upon outcome.
 
     Parameters
